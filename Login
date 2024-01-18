@@ -1,0 +1,93 @@
+package login;
+
+import io.appium.java_client.MobileElement;
+import io.appium.java_client.TouchAction;
+import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.touch.offset.PointOption;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class loginRedikru {
+	
+	static AndroidDriver<MobileElement> driver;
+	
+	// Main method
+		public static void main(String[] args) {
+		    try{
+		    	openRedikru();		       	    		       
+		    	waitAndTapTopOfScreen();
+		    	tapOnTopOfScreen();
+		        login();
+		    }catch(Exception exp){
+		        System.out.println(exp.getCause());
+		        System.out.println(exp.getMessage());
+		        exp.printStackTrace();
+		    }
+		}
+		
+	    // Opening app
+	    public static void openRedikru() throws MalformedURLException{
+	    	
+	    	DesiredCapabilities cap = new DesiredCapabilities();
+	        cap.setCapability("deviceName", "Galaxy A52");
+	        cap.setCapability("udid", "192.168.50.146:5555"); //RR8R6036KAB//192.168.50.146:5555
+	        cap.setCapability("platformName", "Android");
+	        cap.setCapability("platformVersion", "12");
+	        cap.setCapability("appPackage", "com.redikru.app");		  
+	        cap.setCapability("appActivity", "com.redikru.app.MainActivity");
+	        URL url = new URL("http://127.0.0.1:4723/wd/hub");
+	        driver = new AndroidDriver<MobileElement>(url, cap);
+	        
+	        System.out.println("Application Redikru launched, please wait");       
+	    	
+	    }	    
+	    
+	    //Tap modal
+	    public static void waitAndTapTopOfScreen() {
+	        try {
+	            Thread.sleep(5000); // Wait for 40 seconds
+	        } catch (InterruptedException e) {
+	            e.printStackTrace();
+	        }
+	        tapOnTopOfScreen();
+	    }
+
+	    // Tap top screen to close modal
+	    public static void tapOnTopOfScreen() {
+	        org.openqa.selenium.Dimension size = driver.manage().window().getSize();
+	        int x = (int) (size.width * 0.23);
+	        int y = (int) (size.height * 0.23);
+	        TouchAction touchAction = new TouchAction(driver);
+	        touchAction.tap(PointOption.point(x, y)).perform();
+	    }
+	    
+	   
+	    // Login attempt
+	    public static void login() {
+	        // Create a WebDriverWait object
+	        WebDriverWait wait = new WebDriverWait(driver, 50);
+
+	        // Wait for the phone number field to be visible
+	        WebElement phoneNumber = wait.until(ExpectedConditions.visibilityOfElementLocated(By.className("android.widget.EditText")));
+
+	        // Find the password field by its element ID
+	        WebElement passwordField = driver.findElement(By.xpath("//*[@resource-id='login__input-password']"));
+
+	        // Enter the phone number and password values
+	        phoneNumber.sendKeys("14045");
+	        passwordField.sendKeys("tes123456");
+
+	        // Find the sign-in button by its element ID
+	        WebElement signInButton = driver.findElement(By.xpath("//*[@resource-id='login__sign-in-button']"));
+
+	        // Tap on the sign-in button
+	        signInButton.click();
+	    }
+ 
+}
