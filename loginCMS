@@ -1,0 +1,36 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.action_chains import ActionChains
+
+
+# Setup webdriver service
+service = Service(ChromeDriverManager().install())
+
+# Create a new instance of the browser driver
+chrome_options = Options()
+chrome_options.add_experimental_option("detach", True)
+driver = webdriver.Chrome(service=service, options=chrome_options)
+
+# Open the login page
+driver.maximize_window()
+driver.get('https://celestial.redikru.com/')
+
+# Find the elements by their IDs using WebDriverWait
+wait = WebDriverWait(driver, 10) 
+username_element = wait.until(EC.presence_of_element_located((By.ID, 'input-username')))
+password_element = wait.until(EC.presence_of_element_located((By.ID, 'input-password')))
+
+# Enter your username and password
+username_element.send_keys('arya@redigan.co.id')
+password_element.send_keys('rahasiaku')
+
+# Find and click the login button by its HTML
+login_button = wait.until(EC.element_to_be_clickable((By.XPATH, '//button/div[contains(text(), "Masuk")]')))
+login_button.click()
+
